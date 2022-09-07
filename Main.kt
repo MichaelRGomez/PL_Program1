@@ -17,7 +17,7 @@ fun main() {
 
             //checking for terminating word
             if (consoleInput == "HALT"){
-                println("Thank you for compling")
+                println("Thank you for compiling")
                 break
             }
             else
