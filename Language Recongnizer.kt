@@ -1,11 +1,14 @@
+import java.util.LinkedList
+
 class languageRecognizer constructor(input : String) {
-    //coverting the input string in to a list of type string
+    //converting the input string in to a list of type string
     private var workingSentence : List<String> = input.split(Regex("\\s+"))
+    private var errorList : MutableList<String> = LinkedList()
 
     //This function must start with: flag = 0, errflag = false, and index = 0
-    public var hasError : Boolean = checkSentence(workingSentence, 0, false, 0)
+    public var hasError : Boolean = checkSentence(workingSentence, 0, false, 0, errorList)
 
-    private fun checkSentence(sen : List<String>, flag : Int, errFlag : Boolean, index : Int): Boolean{
+    private fun checkSentence(sen : List<String>, flag : Int, errFlag : Boolean, index : Int, errL : MutableList<String>): Boolean{
         var ierrFlag : Boolean = false
         /*
         Flags
@@ -32,30 +35,30 @@ class languageRecognizer constructor(input : String) {
                 0 -> {
                     //checking for start
                     if (sen.first() != "start") {
-                        println("syntax error: expected \"start\" instead of \"" + sen.first() + "\"")
+                        errL.add("syntax error: expected \"start\" instead of \"" + sen.first() + "\"")
                         ierrFlag = true
                     }
 
                     //checking if the list only consists of one string
                     if(sen.size == 1){
-                        println("incomplete instruction")
-                        return checkSentence(sen, -1, true, 0)
+                        errL.add("incomplete instruction")
+                        return checkSentence(sen, -1, true, 0, errL)
                     }
 
                     //checking for stop
                     if (sen.last() != "stop") {
-                        println("syntax error: expected \"stop\" instead of \"" + sen.last() + "\"")
+                        errL.add("syntax error: expected \"stop\" instead of \"" + sen.last() + "\"")
                         ierrFlag = true
                     }
 
                     //checking for empty instructions
                     if (sen.get(1) == sen.last()) {
-                        println("no instructions to compile")
-                        return checkSentence(sen,-1, true, 0)
+                        errL.add("no instructions to compile")
+                        return checkSentence(sen,-1, true, 0, errL)
                     }
 
                     //next
-                    return  checkSentence(sen, 1, ierrFlag, index + 1)
+                    return  checkSentence(sen, 1, ierrFlag, index + 1,  errL)
                 }
 
                 //checking for the first variable
@@ -63,19 +66,23 @@ class languageRecognizer constructor(input : String) {
                     //checking if the correct variable is being used
                     if(!isValidVariable(sen.get(index)))
                     {
-                        println("syntax error: expected \"R\",\"S\",\"T\",\"U\", instead of \"" + sen.get(index) + "\"")
+                        errL.add("syntax error: expected \"R\",\"S\",\"T\",\"U\", instead of \"" + sen.get(index) + "\"")
                         ierrFlag = true
                     }
 
-                    //check if the next string is 'stop'
+                    //check if the current string is 'stop' or if the next string is 'stop'
+                    if(sen.get(index) == sen.last()){
+                        errL.add("syntax error: expected another instruction but found " + sen.last() + " instead")
+                        return checkSentence(sen, -1, true, index, errL)
+                    }
                     if(isStopNext(sen.get(index + 1), sen.last()))
                     {
-                        println("syntax error: incomplete instruction")
-                        return checkSentence(sen, -1, true, index + 1)
+                        errL.add("syntax error: incomplete instruction")
+                        return checkSentence(sen, -1, true, index + 1,  errL)
                     }
 
                     //next
-                    return checkSentence(sen, 2, (ierrFlag || errFlag), index + 1)
+                    return checkSentence(sen, 2, (ierrFlag || errFlag), index + 1, errL)
                 }
 
                 //checks the assignment token
@@ -83,19 +90,19 @@ class languageRecognizer constructor(input : String) {
                     //checking for the assignment token
                     if(sen.get(index) != "<=")
                     {
-                        println("syntax error: expected \"<=\" instead of \"" + sen.get(index) + "\"")
+                        errL.add("syntax error: expected \"<=\" instead of \"" + sen.get(index) + "\"")
                         ierrFlag = true
                     }
 
                     //check if the next string is 'stop'
                     if(isStopNext(sen.get(index + 1), sen.last()))
                     {
-                        println("syntax error: incomplete instruction")
-                        return checkSentence(sen, -1, true, index + 1)
+                        errL.add("syntax error: incomplete instruction")
+                        return checkSentence(sen, -1, true, index + 1, errL)
                     }
 
                     //next
-                    return checkSentence(sen, 3, (ierrFlag || errFlag), index + 1)
+                    return checkSentence(sen, 3, (ierrFlag || errFlag), index + 1, errL)
                 }
 
                 //checking if assignment expression syntax is being followed
@@ -103,12 +110,12 @@ class languageRecognizer constructor(input : String) {
                     //checking for the first assigned variable
                     if(!isValidVariable(sen.get(index)))
                     {
-                        println("syntax error: expected \"R\",\"S\",\"T\",\"U\", instead of \"" + sen.get(index) + "\"")
+                        errL.add("syntax error: expected \"R\",\"S\",\"T\",\"U\", instead of \"" + sen.get(index) + "\"")
                         ierrFlag = true
                     }
 
                     //next
-                    return checkSentence(sen, 4, (ierrFlag || errFlag), index + 1)
+                    return checkSentence(sen, 4, (ierrFlag || errFlag), index + 1, errL)
                 }
 
                 //checking if an expression token is being used
@@ -123,26 +130,33 @@ class languageRecognizer constructor(input : String) {
                     when (whatExpressionToken(sen.get(index))){
                         //an expression is being used
                         0 -> {
-                            return checkSentence(sen, 3, errFlag, index + 1)
+                            return checkSentence(sen, 3, errFlag, index + 1, errL)
                         }
 
                         //not a token or stop; something not following the syntax
                         -2 -> {
                             //reporting that we don't know wtf is there
-                            println("syntax error: expected operation ( \"/\" or \"*\" ) or expected \";\" or  expected \"stop\"")
-                            println("stopping compilation")
-                            return checkSentence(sen, -1, true, index + 1)
+                            errL.add("syntax error: expected operation ( \"/\" or \"*\" ) or expected \";\" or  expected \"stop\"")
+                            errL.add("stopping compilation")
+                            return checkSentence(sen, -1, true, index + 1, errL)
                         }
 
                         // completed assignment
-                        1 -> return checkSentence( sen, 1, errFlag, index + 1)
+                        1 -> return checkSentence( sen, 1, errFlag, index + 1, errL)
 
                         //normal assignment is preformed and instructions are completed
-                        -1 -> return checkSentence(sen, -1, errFlag, index)
+                        -1 -> return checkSentence(sen, -1, errFlag, index, errL)
                     }
                 }
             }
 
+        }
+
+        if(errFlag) {
+            println("Error(s) have been detected")
+            for(i in errL){
+                println(i)
+            }
         }
 
         return errFlag
