@@ -1,10 +1,7 @@
 // main
-fun main() {
 
-    // main program loop for the bnf display and input string
-    while (true) {
-        print(
-        "\n\n\n\n" +
+//constant for printing the menu
+val instructions : String = "\n\n\n\n" +
         "-------------------------------------------------------\n" +
         "BNF Grammar | Example : start R <= S * T ; U <= R stop \n" +
         "-------------------------------------------------------\n" +
@@ -19,7 +16,16 @@ fun main() {
         "-------------------------------------------------------\n" +
         " Enter \"HALT\" to terminate program\n" +
         "-------------------------------------------------------\n"
-        )
+fun main() {
+
+    // main program loop for the bnf display and input string
+    promptLoop()
+
+}
+
+fun promptLoop(){
+    while (true) {
+        print(instructions)
 
         // prompting the user for the input string
         // read in the input from the user

@@ -187,9 +187,4 @@ class languageRecognizer constructor(input : String) {
             else -> -2
         }
     }
-
-    //returns the formatted List<String>
-    public fun getSen() : List<String>{
-        return workingSentence
-    }
 }
