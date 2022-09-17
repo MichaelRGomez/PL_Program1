@@ -2,13 +2,13 @@ import java.util.LinkedList
 
 class languageRecognizer constructor(input : String) {
     //converting the input string in to a list of type string
-    private var workingSentence : List<String> = input.split(Regex("\\s+"))
+    private var workingSentence : MutableList<String> = input.split(Regex("\\s+")).toMutableList()
     private var errorList : MutableList<String> = LinkedList()
 
     //This function must start with: flag = 0, errflag = false, and index = 0
     public var hasError : Boolean = checkSentence(workingSentence, 0, false, 0, errorList)
 
-    private fun checkSentence(sen : List<String>, flag : Int, errFlag : Boolean, index : Int, errL : MutableList<String>): Boolean{
+    private fun checkSentence(sen : MutableList<String>, flag : Int, errFlag : Boolean, index : Int, errL : MutableList<String>): Boolean{
         var ierrFlag : Boolean = false
         /*
         Flags
@@ -107,6 +107,15 @@ class languageRecognizer constructor(input : String) {
 
                 //checking if assignment expression syntax is being followed
                 3 -> {
+                    //checks to see if ";" is stuck together with the variable
+                    if(sen.get(index).length > 1  && sen.get(index) != sen.last()){
+                        var copy : String = sen.get(index)
+                        sen.removeAt(index)
+                        sen.add(index, copy[1].toString())
+                        sen.add(index, copy[0].toString())
+                        return checkSentence(sen,3, errFlag, index, errL)
+                    }
+
                     //checking for the first assigned variable
                     if(!isValidVariable(sen.get(index)))
                     {
@@ -120,6 +129,15 @@ class languageRecognizer constructor(input : String) {
 
                 //checking if an expression token is being used
                 4 -> {
+                    //checks to see if ";" is stuck together with the variable
+                    if(sen.get(index).length > 1  && sen.get(index) != sen.last()){
+                        var copy : String = sen.get(index)
+                        sen.removeAt(index)
+                        sen.add(index, copy[1].toString())
+                        sen.add(index, copy[0].toString())
+                        return checkSentence(sen,4, errFlag, index, errL)
+                    }
+
                     //checking which expression token is being used
                     /* flags
                        -2 = not following syntax
