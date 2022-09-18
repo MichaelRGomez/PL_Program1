@@ -49,8 +49,8 @@ fun promptLoop(){
                     var bnf = bnfDerivation(program.getFormattedList())
                     bnf.print()
 
-                    //var parse_tree = parseTree(program.getFormattedList())
-                    //parse_tree.printTree()
+                    var parse_tree = parseTree(program.getFormattedList())
+                    parse_tree.printTree()
                 }
             }
         }

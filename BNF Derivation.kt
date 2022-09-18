@@ -32,8 +32,11 @@ class bnfDerivation constructor( fromatted_string : List<String>){
 
         flipPrinting()
 
-        for(i in printingList){
-            println(i)
+        var x : Int = 1
+        println("<program> -> " + printingList[0])
+        while(x != printingList.size){
+            println( x.toString() + " -> " + printingList[x])
+            x++
         }
     }
     //sub functions
