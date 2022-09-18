@@ -46,8 +46,11 @@ fun promptLoop(){
                 var program = languageRecognizer(consoleInput.orEmpty())
 
                 if(!program.hasError){
-                    var parse_tree = parseTree(program.getFormattedList())
-                    parse_tree.printTree()
+                    var bnf = bnfDerivation(program.getFormattedList())
+                    bnf.print()
+
+                    //var parse_tree = parseTree(program.getFormattedList())
+                    //parse_tree.printTree()
                 }
             }
         }

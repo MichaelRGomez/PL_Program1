@@ -1,5 +1,5 @@
 //actual class
-class parseTree  constructor(formatted_string : MutableList<String>){
+class parseTree  constructor(formatted_string : List<String>){
     //editable copy of the input_string in list form
     private var sen : MutableList<String> = formatted_string.toMutableList()
 
@@ -9,7 +9,7 @@ class parseTree  constructor(formatted_string : MutableList<String>){
     //prefix for format the string inside the printinglist
     private var pre : prefix = prefix()
 
-    private var semiColons : Int = countSemiColons(formatted_string)
+    private var semiColons : Int = countSemiColons(sen)
 
     //function that'll print the parse tree
     public fun printTree(){
@@ -44,8 +44,6 @@ class parseTree  constructor(formatted_string : MutableList<String>){
                if(semiColons != 0){
                    printMultipleInstruction(sen.first())
                }else {
-                   pre.removeLayer()
-                   pre.addLayer("<instructions>" + pre.space)
                    printSingleInstruction(sen.first())
                }
            }
