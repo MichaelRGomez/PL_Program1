@@ -5,14 +5,14 @@ val instructions : String = "\n\n\n\n" +
         "-------------------------------------------------------\n" +
         "BNF Grammar | Example : start R <= S * T ; U <= R stop \n" +
         "-------------------------------------------------------\n" +
-        "   <program>->  start <stmt_list> stop\n" +
-        " <stmt_list>->  <stmt>\n" +
-        "             |  <stmt> ; <stmt_list>\n" +
-        "      <stmt>->  <var> = <expr>\n" +
-        "       <var>->  R | S | T | U\n" +
-        "      <expr>->  <var> / <var>\n" +
-        "             |  <var> * <var>\n" +
-        "             |  <var>\n" +
+        "    <program>->  start <instruction> stop\n" +
+        "  <stmt_list>->  <instruction>\n" +
+        "              |  <instruction> ; <instructions>\n" +
+        "<instruction>->  <variable> = <calculation>\n" +
+        "   <variable>->  R | S | T | U\n" +
+        "<calculation>->  <variable> / <variable>\n" +
+        "              |  <variable> * <variable>\n" +
+        "              |  <variable>\n" +
         "-------------------------------------------------------\n" +
         " Enter \"HALT\" to terminate program\n" +
         "-------------------------------------------------------\n"
