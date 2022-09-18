@@ -8,6 +8,11 @@ class languageRecognizer constructor(input : String) {
     //This function must start with: flag = 0, errflag = false, and index = 0
     public var hasError : Boolean = checkSentence(workingSentence, 0, false, 0, errorList)
 
+    //this function returns the formatted string
+    public fun getFormattedList (): MutableList<String> {
+        return workingSentence
+    }
+
     private fun checkSentence(sen : MutableList<String>, flag : Int, errFlag : Boolean, index : Int, errL : MutableList<String>): Boolean{
         var ierrFlag : Boolean = false
         /*

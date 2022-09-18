@@ -46,7 +46,8 @@ fun promptLoop(){
                 var program = languageRecognizer(consoleInput.orEmpty())
 
                 if(!program.hasError){
-                    println("Code is correct")
+                    var parse_tree = parseTree(program.getFormattedList())
+                    parse_tree.printTree()
                 }
             }
         }
