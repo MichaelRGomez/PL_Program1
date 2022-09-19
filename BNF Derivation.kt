@@ -1,6 +1,6 @@
-class bnfDerivation constructor( fromatted_string : List<String>){
+class bnfDerivation constructor( formatted_string : List<String>){
     //copy of the formatted string
-    private var sen : MutableList<String> = fromatted_string.toMutableList()
+    private var sen : MutableList<String> = formatted_string.toMutableList()
     private var printingList : MutableList<String> = emptyList<String>().toMutableList()
     var index : Int = 1
     var programFlag : Boolean = false
@@ -33,9 +33,10 @@ class bnfDerivation constructor( fromatted_string : List<String>){
         flipPrinting()
 
         var x : Int = 1
+        println("\n BNF Derivation \n")
         println("<program> -> " + printingList[0])
         while(x != printingList.size){
-            println( x.toString() + " -> " + printingList[x])
+            println(" " + x.toString() + " -> " + printingList[x])
             x++
         }
     }

@@ -160,7 +160,7 @@ class languageRecognizer constructor(input : String) {
                         //not a token or stop; something not following the syntax
                         -2 -> {
                             //reporting that we don't know wtf is there
-                            errL.add("syntax error: expected operation ( \"/\" or \"*\" ) or expected \";\" or  expected \"stop\"")
+                            errL.add("syntax error: expected operation ( \"/\" or \"*\" ) or \nexpected \";\" or  expected \"stop\"")
                             errL.add("stopping compilation")
                             return checkSentence(sen, -1, true, index + 1, errL)
                         }

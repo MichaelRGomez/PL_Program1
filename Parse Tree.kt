@@ -13,6 +13,8 @@ class parseTree  constructor(formatted_string : List<String>){
 
     //function that'll print the parse tree
     public fun printTree(){
+        println("\n Parse Tree \n")
+
         //preparing sen so that the parse tree can be constructed
         flipSen()
         sen.add(0, "<program>")
@@ -179,7 +181,7 @@ class parseTree  constructor(formatted_string : List<String>){
 class prefix constructor(){
     public var layer_count : Int = 0
     private var layer : String = ""
-    private var layer_branch = ""
+    private var layer_branch : String = ""
     private var actual_prefix : MutableList<String> = emptyList<String>().toMutableList()
     public var space : String = "    "
 
